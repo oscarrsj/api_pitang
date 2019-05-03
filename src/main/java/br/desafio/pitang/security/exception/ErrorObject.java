@@ -1,7 +1,5 @@
 package br.desafio.pitang.security.exception;
 
-import lombok.AllArgsConstructor;
-
 public class ErrorObject {
 
 	private String message;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +17,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import br.desafio.pitang.utils.PasswordUtils;
 
 @Entity
 @NamedQuery(name = "Usuario.findByEmailAddress",
@@ -40,7 +43,7 @@ public class Usuario implements Serializable {
 	
 	private String password;
 	
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL , fetch = FetchType.EAGER,  orphanRemoval = true)
 	@JoinColumn(name = "USUARIO_ID",referencedColumnName   = "id")
 	@Valid
 	private List<Telefone> phones;
@@ -94,8 +97,7 @@ public class Usuario implements Serializable {
 	}
 
 	public void encriptPassowrd() {
-		if(password != null)
-			new BCryptPasswordEncoder().encode(password);
+		setPassword(PasswordUtils.gerarBCrypt(password));
 	}
 	
 	public boolean validarFields() {

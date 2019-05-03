@@ -1,10 +1,5 @@
 package br.desafio.pitang.security.exception;
 
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
 public class ErrorResponse {
 
 	private String message;

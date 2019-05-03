@@ -1,6 +1,5 @@
 package br.desafio.pitang.service;
 
-import org.jboss.jandex.TypeTarget.Usage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

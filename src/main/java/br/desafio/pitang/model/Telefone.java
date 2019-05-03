@@ -23,9 +23,22 @@ public class Telefone {
 	@Pattern(regexp = "^[+][0-9]{2}[:.,-]?$", message="Invalid Country Code")
 	private String country_code;
 	
-//	@ManyToOne
-//	@JoinColumn(name="usuarioId" , nullable= false)
-//	private Usuario usuario;
+	public Telefone() {
+		// TODO Auto-generated constructor stub
+	}
+	
+	
+	
+	public Telefone(@Pattern(regexp = "^9[0-9]{8}[:.,-]?$", message = "Invalid number") String number,
+			@Pattern(regexp = "^[0-9]{2}[:.,-]?$", message = "Invalid area_code") String area_code,
+			@Pattern(regexp = "^[+][0-9]{2}[:.,-]?$", message = "Invalid Country Code") String country_code) {
+		super();
+		this.number = number;
+		this.area_code = area_code;
+		this.country_code = country_code;
+	}
+
+
 
 	public long getId() {
 		return id;
