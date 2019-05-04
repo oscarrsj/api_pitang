@@ -99,7 +99,7 @@ public class UsuarioResourceTest {
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON))
 					.andExpect(status().isConflict())
-					.andExpect(jsonPath("$.message").value("Invalid e-mail or password"));
+					.andExpect(jsonPath("$.message").value("Missing Fields"));
 	}
 	
 	
