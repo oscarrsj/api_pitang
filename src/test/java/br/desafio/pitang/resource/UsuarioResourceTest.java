@@ -46,10 +46,6 @@ public class UsuarioResourceTest {
 	private static final String _EMAIL = "exemplo@gmail.com";
 	
 	
-	
-	
-	
-	
 	//singup
 	@Test
 	@WithMockUser
