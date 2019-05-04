@@ -14,7 +14,6 @@ public class AuthenticationRequest implements Serializable {
 		usuario.setEmail(email);
 		usuario.setPassword(password);
 
-		usuario.encriptPassowrd();
 
 		return usuario;
 	}

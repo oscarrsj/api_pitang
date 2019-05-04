@@ -41,10 +41,16 @@ public class UsuarioResourceTest {
 	private UsuarioService usuarioService;
 
 	private static final String URL_SINGUP = "/singup";
-	private static final Long ID_USUARIO = 1l;
+	private static final String URL_SINGIN = "/singin";
+	private static final Long ID_USUARIO = 2l;
 	private static final String _EMAIL = "exemplo@gmail.com";
 	
-
+	
+	
+	
+	
+	
+	//singup
 	@Test
 	@WithMockUser
 	public void testSingUp() throws Exception {
@@ -72,6 +78,64 @@ public class UsuarioResourceTest {
 			.andExpect(jsonPath("$.message").value("E-mail already exists"));
 	}
 	
+	
+	@Test
+	@WithMockUser
+	public void testSingUpInsucessoInvalidFields() throws Exception {
+
+	     mvc.perform(MockMvcRequestBuilders.post(URL_SINGUP)
+			.content(obterJsonInvalidRequisicaoPost())
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.message").value("Invalid Fields"));
+	}
+	
+
+	//Sing In
+	@Test
+	@WithMockUser
+	public void testSingInMissingFields() throws Exception {
+		BDDMockito.given(this.usuarioService.singin(Mockito.any(Usuario.class))).willThrow(new InvalidFieldsException("Invalid e-mail or password")); 
+		
+		mvc.perform(MockMvcRequestBuilders.post(URL_SINGIN)
+					.content(obterJsonAuthenticationRequestRequisicaoPost(false))
+					.contentType(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON))
+					.andExpect(status().isConflict())
+					.andExpect(jsonPath("$.message").value("Invalid e-mail or password"));
+	}
+	
+	
+	@Test
+	@WithMockUser
+	public void testSingInEmailOrPasswordInvalid() throws Exception {
+		  mvc.perform(MockMvcRequestBuilders.post(URL_SINGIN)
+					.content(obterJsonAuthenticationRequestRequisicaoPost(false))
+					.contentType(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON))
+					.andExpect(status().isConflict())
+					.andExpect(jsonPath("$.message").value("Missing Fields"));
+	}
+	
+	
+	@Test
+	@WithMockUser
+	public void testSingInSucesso() throws Exception {
+		BDDMockito.given(this.usuarioService.singin(Mockito.any(Usuario.class))).willReturn(obterDadosUsuario());
+		
+		  mvc.perform(MockMvcRequestBuilders.post(URL_SINGIN)
+					.content(obterJsonAuthenticationRequestRequisicaoPost(true))
+					.contentType(MediaType.APPLICATION_JSON)
+					.accept(MediaType.APPLICATION_JSON))
+					.andExpect(status().isOk())
+					.andExpect(jsonPath("$.token").isNotEmpty());
+	}
+	
+	
+	
+	
+	//private Methods
 	private Usuario obterDadosUsuario() {
 		Usuario usuario = new Usuario();
 		usuario.setId(ID_USUARIO);
@@ -84,7 +148,7 @@ public class UsuarioResourceTest {
 		usuario.getPhones().add(new Telefone("982868486", "81", "+55"));
 		return usuario;
 	}
-
+	
 	private String obterJsonRequisicaoPost() throws JsonProcessingException {
 		Usuario usuario = new Usuario();
 		usuario.setId(null);
@@ -95,6 +159,29 @@ public class UsuarioResourceTest {
 		usuario.setPhones(new ArrayList<>());
 		usuario.getPhones().add(new Telefone("991911515", "81", "+55"));
 		usuario.getPhones().add(new Telefone("982868486", "81", "+55"));
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(usuario);
+	}
+	
+	private String obterJsonInvalidRequisicaoPost() throws JsonProcessingException {
+		Usuario usuario = new Usuario();
+		usuario.setId(null);
+		usuario.setEmail("email invalido");
+		usuario.setFirstName("exemplo");
+		usuario.setLastName("Test");
+		usuario.setPassword("123");
+		usuario.setPhones(new ArrayList<>());
+		usuario.getPhones().add(new Telefone("991911515", "81", "+55"));
+		usuario.getPhones().add(new Telefone("982868486", "81", "+55"));
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(usuario);
+	}
+	
+	private String obterJsonAuthenticationRequestRequisicaoPost(boolean informacoesValidas) throws JsonProcessingException{
+		AuthenticationRequest usuario = new AuthenticationRequest();
+		usuario.setEmail("emailValido@gmail.com");
+		if(informacoesValidas)
+			usuario.setPassword("123");
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(usuario);
 	}

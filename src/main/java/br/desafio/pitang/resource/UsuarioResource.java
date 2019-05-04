@@ -38,11 +38,19 @@ public class UsuarioResource {
 	
 	@PostMapping("/singin")
 	public ResponseEntity<Object>singup(@RequestBody  AuthenticationRequest usuarioRequest) {
-	    if(usuarioRequest == null || usuarioRequest.getEmail() == null || usuarioRequest.getPassword() == null)
-	  		   throw new InvalidFieldsException("Missing Fields");
+	    ValidarFildsAuthentication(usuarioRequest);
 	    
 	    Usuario usuarioSalvo =  usuarioService.singin(usuarioRequest.convertToUsuario());
-		return ResponseEntity.ok(TokenUtil.getToken(usuarioSalvo.getEmail()));
+	    
+	    Response<Usuario> response  = new Response<>();
+		response.setToken(TokenUtil.getToken(usuarioSalvo.getEmail()));
+	    
+		return ResponseEntity.ok(response);
+	}
+
+	private void ValidarFildsAuthentication(AuthenticationRequest usuarioRequest) {
+		if(usuarioRequest == null || usuarioRequest.getEmail() == null || usuarioRequest.getPassword() == null)
+	  		   throw new InvalidFieldsException("Missing Fields");
 	} 
 	
 	@GetMapping(path = "/me")

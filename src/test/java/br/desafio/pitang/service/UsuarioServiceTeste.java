@@ -17,6 +17,7 @@ import br.desafio.pitang.model.Telefone;
 import br.desafio.pitang.model.Usuario;
 import br.desafio.pitang.repository.UsuarioRepository;
 import br.desafio.pitang.security.exception.InvalidFieldsException;
+import br.desafio.pitang.utils.PasswordUtils;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -27,6 +28,10 @@ public class UsuarioServiceTeste {
 
 	@MockBean
 	private UsuarioRepository usuarioRepository;
+	
+	
+	@MockBean
+	private PasswordUtils passwordUtils;
 	
 	@Autowired
 	private UsuarioService usuarioService;
@@ -57,10 +62,28 @@ public class UsuarioServiceTeste {
 		Usuario novoUsuario = usuarioService.singup(usuario);
 		
 		assertEquals(novoUsuario.getId(), ID_USUARIO);
-		
-		
 	}
 
+	@Test()
+	public void testSingInSucesso() {
+		Usuario usuario = obterDadosUsuario();
+		usuario.encriptPassowrd();
+		BDDMockito.given(this.usuarioRepository.findByEmailAddress(Mockito.anyString())).willReturn(usuario);	
+		
+		usuarioService.singin(obterDadosUsuario());
+	}
+	
+	
+	@Test(expected = InvalidFieldsException.class)
+	public void testSingInEmailPasswordInvalido() {
+		Usuario usuario = obterDadosUsuario();
+		usuario.encriptPassowrd();
+		BDDMockito.given(this.usuarioRepository.findByEmailAddress(Mockito.anyString())).willReturn(usuario);	
+		
+		Usuario usuarioComSenhaInvalida = obterDadosUsuario();
+		usuarioComSenhaInvalida.setPassword("456");
+		usuarioService.singin(usuarioComSenhaInvalida);
+	}
 	
 	private Usuario obterDadosUsuario() {
 		Usuario usuario = new Usuario();

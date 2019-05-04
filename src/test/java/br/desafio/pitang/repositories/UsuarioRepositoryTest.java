@@ -22,7 +22,7 @@ import br.desafio.pitang.repository.UsuarioRepository;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class UsuarioRepositoryTest {
-	
+
 	private static final String SENHA = "123";
 	private static final String EMAIL = "usuarioTest@gmail.com";
 	@Autowired
@@ -32,12 +32,12 @@ public class UsuarioRepositoryTest {
 	public void setUp() {
 		usuarioRepository.save(obterDadosUsuario());
 	}
-	
+
 	@After
 	public final void tearDown() {
 		this.usuarioRepository.deleteAll();
 	}
-	
+
 	@Test
 	public void testFindByEmailAddress() {
 		Usuario usuario = usuarioRepository.findByEmailAddress(EMAIL);
@@ -46,8 +46,12 @@ public class UsuarioRepositoryTest {
 		assertNotNull(usuario.getId());
 		assertFalse(usuario.getPhones().isEmpty());
 	}
-	
-	
+
+	@Test
+	public void testSaveSucesso() {
+		Usuario usuario = usuarioRepository.save(obterDadosUsuario());
+		assertNotNull(usuario.getId());
+	}
 	
 
 	private Usuario obterDadosUsuario() {
@@ -56,17 +60,16 @@ public class UsuarioRepositoryTest {
 		usuario.setFirstName("Usuario");
 		usuario.setLastName("Teste");
 		usuario.setPassword(SENHA);
-	    usuario.encriptPassowrd();
-	    
-	    
-	    List<Telefone> phones = new ArrayList<>();
-	   
-	    phones.add(new Telefone("991917878", "81", "+55"));
-	    phones.add(new Telefone("991917879", "81", "+55"));
-	    phones.add(new Telefone("991917880", "81", "+55"));
-	    usuario.setPhones(phones);
-	   
+		usuario.encriptPassowrd();
+
+		List<Telefone> phones = new ArrayList<>();
+
+		phones.add(new Telefone("991917878", "81", "+55"));
+		phones.add(new Telefone("991917879", "81", "+55"));
+		phones.add(new Telefone("991917880", "81", "+55"));
+		usuario.setPhones(phones);
+
 		return usuario;
 	}
-	
+
 }
