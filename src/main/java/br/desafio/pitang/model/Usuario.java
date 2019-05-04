@@ -16,8 +16,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
 import br.desafio.pitang.utils.PasswordUtils;
 
 @Entity

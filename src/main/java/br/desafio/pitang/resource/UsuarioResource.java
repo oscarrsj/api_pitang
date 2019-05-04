@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.desafio.pitang.jwt.TokenUtil;
 import br.desafio.pitang.model.Usuario;
+import br.desafio.pitang.response.Response;
 import br.desafio.pitang.security.exception.InvalidFieldsException;
 import br.desafio.pitang.service.UsuarioService;
 
@@ -26,11 +27,13 @@ public class UsuarioResource {
 	private UsuarioService usuarioService;
 
 	
+	
 	@PostMapping("/singup")
 	public ResponseEntity<Object>singup(@RequestBody @Valid Usuario usuario) {
 		Usuario usuarioSalvo = usuarioService.singup(usuario);
-		
-		return ResponseEntity.ok("token: " + TokenUtil.getToken(usuarioSalvo.getEmail()));
+		Response<Usuario> response  = new Response<>();
+		response.setToken(TokenUtil.getToken(usuarioSalvo.getEmail()));
+		return ResponseEntity.ok(response );
 	} 
 	
 	@PostMapping("/singin")

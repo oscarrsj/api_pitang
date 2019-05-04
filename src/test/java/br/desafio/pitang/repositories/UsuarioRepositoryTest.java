@@ -18,7 +18,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import br.desafio.pitang.model.Telefone;
 import br.desafio.pitang.model.Usuario;
 import br.desafio.pitang.repository.UsuarioRepository;
-import br.desafio.pitang.utils.PasswordUtils;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

@@ -31,10 +31,6 @@ public class UsuarioService {
 			throw new InvalidFieldsException("Missing fields");
 		}
 		
-		if(usuario.getId() != null) {
-			throw new InvalidFieldsException("ID preenchido");
-		}
-		
 		usuario.encriptPassowrd();
 		
 		Usuario UsuarioSalvo = usuarioRepository.save(usuario);

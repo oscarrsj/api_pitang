@@ -4,9 +4,6 @@ public class ErrorResponse {
 
 	private String message;
 	private int code;
-	// private String status;
-	// private String objectName;
-	// private List<ErrorObject> errors;
 
 	public ErrorResponse() {
 		// TODO Auto-generated constructor stub
