@@ -1,7 +1,5 @@
 package br.desafio.pitang.resource;
 
-import java.security.Principal;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,12 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.desafio.pitang.jwt.TokenUtil;
 import br.desafio.pitang.model.Usuario;
 import br.desafio.pitang.response.Response;
 import br.desafio.pitang.security.exception.InvalidFieldsException;
+import br.desafio.pitang.security.exception.ResourceUnAuthorizedException;
 import br.desafio.pitang.service.UsuarioService;
 
 
@@ -37,7 +37,7 @@ public class UsuarioResource {
 	} 
 	
 	@PostMapping("/singin")
-	public ResponseEntity<Object>singup(@RequestBody  AuthenticationRequest usuarioRequest) {
+	public ResponseEntity<Object> singup(@RequestBody  AuthenticationRequest usuarioRequest) {
 	    ValidarFildsAuthentication(usuarioRequest);
 	    
 	    Usuario usuarioSalvo =  usuarioService.singin(usuarioRequest.convertToUsuario());
@@ -54,9 +54,22 @@ public class UsuarioResource {
 	} 
 	
 	@GetMapping(path = "/me")
-    public ResponseEntity<Usuario> me(Principal principal) {
-        return ResponseEntity.ok(usuarioService.findByEmailAddress(principal.getName()));
+    public ResponseEntity<Object> me(@RequestHeader String Authorization) {
+		
+		validarAuthorization(Authorization);
+		
+		String email = TokenUtil.getAutentication(Authorization);
+		
+		Usuario usuario = usuarioService.me(email);
+        return ResponseEntity.ok(usuario);
     }
+
+	private void validarAuthorization(String authorization) {
+		if(authorization == null || !authorization.startsWith(TokenUtil.TOKEN_PREFIX))
+			throw new ResourceUnAuthorizedException("Unauthorized");
+		
+		TokenUtil.validarToken(authorization);
+	}
 	
 	
 }

@@ -35,8 +35,18 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     
     
     @ExceptionHandler(InvalidFieldsException.class)
-    public ResponseEntity<?> handleResourceNotFoundException(InvalidFieldsException exception) {
+    public ResponseEntity<?> handleInvalidFieldsException(InvalidFieldsException exception) {
             return new ResponseEntity<>(new ErrorResponse(exception.getMessage() , HttpStatus.CONFLICT.value()), HttpStatus.CONFLICT);
+    }
+    
+    
+    @ExceptionHandler(ResourceUnAuthorizedException.class)
+    public ResponseEntity<?> handleResourceUnAuthorizedExceptionn(ResourceUnAuthorizedException exception) {
+            return new ResponseEntity<>(new ErrorResponse(exception.getMessage() , HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(InvalidTokenException.class)
+    public ResponseEntity<?> handleInvalidTokenException(ResourceUnAuthorizedException exception) {
+    	return new ResponseEntity<>(new ErrorResponse(exception.getMessage() , HttpStatus.INTERNAL_SERVER_ERROR.value()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 	

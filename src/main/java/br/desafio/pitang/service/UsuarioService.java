@@ -1,5 +1,7 @@
 package br.desafio.pitang.service;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +33,10 @@ public class UsuarioService {
 		
 		usuario.encriptPassowrd();
 		
+		Date dataCadastro = new Date();
+		usuario.setCreate_at(dataCadastro);
+		usuario.setLast_login(dataCadastro);
+		
 		Usuario UsuarioSalvo = usuarioRepository.save(usuario);
 		
 	
@@ -45,6 +51,17 @@ public class UsuarioService {
 			throw new InvalidFieldsException("Invalid e-mail or password");
 		}
 		
+		usuarioPesquisado.setLast_login(new Date());
+		usuarioRepository.save(usuario);
+		
 		return usuarioPesquisado;
+	}
+
+
+
+	public Usuario me(String email) {
+		Usuario usuario = findByEmailAddress(email);
+		
+		return usuario;
 	}
 }

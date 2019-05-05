@@ -130,6 +130,11 @@ public class UsuarioResourceTest {
 	
 	
 	
+	//me
+	
+	
+	
+	
 	
 	//private Methods
 	private Usuario obterDadosUsuario() {
