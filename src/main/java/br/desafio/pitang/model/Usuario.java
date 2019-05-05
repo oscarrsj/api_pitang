@@ -1,6 +1,7 @@
 package br.desafio.pitang.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -12,15 +13,20 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PreUpdate;
 import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import br.desafio.pitang.utils.PasswordUtils;
 
 @Entity
 @NamedQuery(name = "Usuario.findByEmailAddress",
 query = "select u from Usuario u where u.email = ?1")
+@JsonInclude(Include.NON_NULL)
 public class Usuario implements Serializable {
 	/**
 	 * 
@@ -45,6 +51,11 @@ public class Usuario implements Serializable {
 	@JoinColumn(name = "USUARIO_ID",referencedColumnName   = "id")
 	@Valid
 	private List<Telefone> phones;
+	
+	
+	private Date create_at;
+	
+	private Date last_login;
 
 	public Long getId() {
 		return id;
@@ -103,5 +114,11 @@ public class Usuario implements Serializable {
 			return false;
 		
 		return true;
+	}
+	
+	@PreUpdate
+	private void preUpdate() {
+		create_at = new Date();
+		last_login = new Date();
 	}
 }
