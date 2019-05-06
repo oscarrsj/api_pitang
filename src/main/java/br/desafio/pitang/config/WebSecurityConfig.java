@@ -23,10 +23,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	
 	  public void configure(WebSecurity web) throws Exception {
-		    web.ignoring()
+		    web.ignoring().antMatchers("/v2/api-docs")//
 		        .antMatchers("/swagger-resources/**")//
 		        .antMatchers("/swagger-ui.html")//
-		        		        
+		        .antMatchers("/configuration/**")//
+		        .antMatchers("/webjars/**")//
+		        .antMatchers("/public")
+		        
 		        .and()
 		        .ignoring()
 		        .antMatchers("/h2-console/**/**");;
