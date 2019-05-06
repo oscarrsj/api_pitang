@@ -28,6 +28,8 @@ import br.desafio.pitang.jwt.TokenUtil;
 import br.desafio.pitang.model.Telefone;
 import br.desafio.pitang.model.Usuario;
 import br.desafio.pitang.security.exception.InvalidFieldsException;
+import br.desafio.pitang.security.exception.InvalidTokenException;
+import br.desafio.pitang.security.exception.ResourceUnAuthorizedException;
 import br.desafio.pitang.service.UsuarioService;
 
 @RunWith(SpringRunner.class)
@@ -125,6 +127,27 @@ public class UsuarioResourceTest {
 		mvc.perform(MockMvcRequestBuilders.get(URL_ME).header("Authorization", TokenUtil.TOKEN_PREFIX + " " + token))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.email").value(_EMAIL));
+	}
+	
+	
+	@Test
+	@WithMockUser
+	public void testMeUnauthorized() throws Exception {
+		BDDMockito.given(this.usuarioService.me(_EMAIL)).willThrow(new ResourceUnAuthorizedException("Unauthorized"));
+
+		mvc.perform(MockMvcRequestBuilders.get(URL_ME).header("Authorization", TokenUtil.TOKEN_PREFIX + " " + token))
+				.andExpect(status().isUnauthorized())
+				.andExpect(jsonPath("$.message").value("Unauthorized"));
+	}
+	
+	
+	@Test
+	@WithMockUser
+	public void testMeInvalidTokenException() throws Exception {
+
+		mvc.perform(MockMvcRequestBuilders.get(URL_ME).header("Authorization", TokenUtil.TOKEN_PREFIX + " skfmsdalkfmdsmf" ))
+				.andExpect(status().isInternalServerError())
+				.andExpect(jsonPath("$.message").value("Unauthorized - Invalid Session"));
 	}
 
 	// private Methods
