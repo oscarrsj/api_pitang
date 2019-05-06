@@ -5,6 +5,7 @@ import java.util.Date;
 import org.springframework.http.HttpStatus;
 
 import br.desafio.pitang.security.exception.InvalidTokenException;
+import br.desafio.pitang.security.exception.ResourceUnAuthorizedException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,18 +22,23 @@ public class TokenUtil {
 				.signWith(SignatureAlgorithm.HS512, SECRET).compact();
 	}
 
-	public static String getAutentication(String token) {
+	public static String resolvedToken(String token) {
+		if(token == null || !token.startsWith(TokenUtil.TOKEN_PREFIX))
+			throw new ResourceUnAuthorizedException("Unauthorized");
+		token = token.substring(7);
+		validarToken(token) ;
+		
 		return Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token.replace(TOKEN_PREFIX, "")).getBody()
 				.getSubject();
 	}
 
-	public static boolean validarToken(String authorization) {
+	private static boolean validarToken(String token) {
 		try {
-			Jwts.parser().setSigningKey(SECRET).parseClaimsJws(authorization);
+			Jwts.parser().setSigningKey(SECRET).parseClaimsJws(token);
 			return true;
 		} catch (JwtException | IllegalArgumentException e) {
 			throw new InvalidTokenException("Unauthorized - Invalid Session");
 		}
 	}
-
+	
 }

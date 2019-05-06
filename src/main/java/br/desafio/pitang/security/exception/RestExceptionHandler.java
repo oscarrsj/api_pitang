@@ -45,7 +45,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             return new ResponseEntity<>(new ErrorResponse(exception.getMessage() , HttpStatus.UNAUTHORIZED.value()), HttpStatus.UNAUTHORIZED);
     }
     @ExceptionHandler(InvalidTokenException.class)
-    public ResponseEntity<?> handleInvalidTokenException(ResourceUnAuthorizedException exception) {
+    public ResponseEntity<?> handleInvalidTokenException(InvalidTokenException exception) {
     	return new ResponseEntity<>(new ErrorResponse(exception.getMessage() , HttpStatus.INTERNAL_SERVER_ERROR.value()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

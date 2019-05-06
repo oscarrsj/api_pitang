@@ -54,22 +54,16 @@ public class UsuarioResource {
 	} 
 	
 	@GetMapping(path = "/me")
-    public ResponseEntity<Object> me(@RequestHeader String Authorization) {
-		
-		validarAuthorization(Authorization);
-		
-		String email = TokenUtil.getAutentication(Authorization);
+    public ResponseEntity<Object> me(@RequestHeader(required = false) String Authorization) {
+		String email = TokenUtil.resolvedToken(Authorization);
 		
 		Usuario usuario = usuarioService.me(email);
+		
+		
         return ResponseEntity.ok(usuario);
     }
 
-	private void validarAuthorization(String authorization) {
-		if(authorization == null || !authorization.startsWith(TokenUtil.TOKEN_PREFIX))
-			throw new ResourceUnAuthorizedException("Unauthorized");
-		
-		TokenUtil.validarToken(authorization);
-	}
+
 	
 	
 }

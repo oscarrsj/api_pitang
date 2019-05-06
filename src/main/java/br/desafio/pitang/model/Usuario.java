@@ -17,6 +17,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -25,6 +27,7 @@ import br.desafio.pitang.utils.PasswordUtils;
 @Entity
 @NamedQuery(name = "Usuario.findByEmailAddress", query = "select u from Usuario u where u.email = ?1")
 @JsonInclude(Include.NON_NULL)
+@JsonIgnoreProperties(value = { "password"},allowSetters = true)
 public class Usuario implements Serializable {
 	/**
 	 * 
@@ -33,6 +36,7 @@ public class Usuario implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonIgnore
 	private Long id;
 
 	private String firstName;
@@ -55,6 +59,7 @@ public class Usuario implements Serializable {
 	private Date last_login;
 
 
+	
 	public Long getId() {
 		return id;
 	}

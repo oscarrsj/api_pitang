@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import br.desafio.pitang.model.Usuario;
 import br.desafio.pitang.repository.UsuarioRepository;
 import br.desafio.pitang.security.exception.InvalidFieldsException;
+import br.desafio.pitang.security.exception.InvalidTokenException;
 import br.desafio.pitang.utils.PasswordUtils;
 
 @Service
@@ -61,7 +62,8 @@ public class UsuarioService {
 
 	public Usuario me(String email) {
 		Usuario usuario = findByEmailAddress(email);
-		
+		if(usuario == null)
+			throw new InvalidTokenException("Unauthorized - Invalid Session");
 		return usuario;
 	}
 }

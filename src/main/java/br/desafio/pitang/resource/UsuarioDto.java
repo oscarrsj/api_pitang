@@ -104,8 +104,6 @@ public class UsuarioDto {
 	}
 
 	
-
-
 	public String getPassword() {
 		return password;
 	}
