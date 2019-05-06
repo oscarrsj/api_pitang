@@ -64,7 +64,7 @@ public class UsuarioResource {
 		Usuario usuario = usuarioService.me(email);
 		
 		
-        return ResponseEntity.ok(usuario);
+        return ResponseEntity.ok(usuario.convertToUsuarioDTO());
     }
 
 

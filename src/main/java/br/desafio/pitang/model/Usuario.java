@@ -1,5 +1,6 @@
 package br.desafio.pitang.model;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -136,5 +137,17 @@ public class Usuario implements Serializable {
 
 	public void setLast_login(Date last_login) {
 		this.last_login = last_login;
+	}
+	
+	@Transient
+	public UsuarioDto convertToUsuarioDTO() {
+		UsuarioDto usuarioDto = new UsuarioDto();
+		usuarioDto.setFirstName(this.firstName);
+		usuarioDto.setLastName(this.lastName);
+		usuarioDto.setEmail(this.email);
+		usuarioDto.setPhones(this.phones);
+		usuarioDto.setCreate_at(create_at);
+		usuarioDto.setLast_login(this.last_login);
+		return usuarioDto;
 	}
 }
