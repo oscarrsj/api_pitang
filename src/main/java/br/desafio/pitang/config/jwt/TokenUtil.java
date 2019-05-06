@@ -1,11 +1,11 @@
-package br.desafio.pitang.jwt;
+package br.desafio.pitang.config.jwt;
 
 import java.util.Date;
 
 import org.springframework.http.HttpStatus;
 
-import br.desafio.pitang.security.exception.InvalidTokenException;
-import br.desafio.pitang.security.exception.ResourceUnAuthorizedException;
+import br.desafio.pitang.exception.InvalidTokenException;
+import br.desafio.pitang.exception.ResourceUnAuthorizedException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

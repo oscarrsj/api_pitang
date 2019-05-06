@@ -10,11 +10,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.desafio.pitang.jwt.TokenUtil;
+import br.desafio.pitang.config.jwt.TokenUtil;
+import br.desafio.pitang.exception.InvalidFieldsException;
+import br.desafio.pitang.exception.ResourceUnAuthorizedException;
 import br.desafio.pitang.model.Usuario;
+import br.desafio.pitang.model.UsuarioDto;
 import br.desafio.pitang.response.Response;
-import br.desafio.pitang.security.exception.InvalidFieldsException;
-import br.desafio.pitang.security.exception.ResourceUnAuthorizedException;
 import br.desafio.pitang.service.UsuarioService;
 
 
@@ -29,18 +30,21 @@ public class UsuarioResource {
 	
 	
 	@PostMapping("/singup")
-	public ResponseEntity<Object>singup(@RequestBody @Valid Usuario usuario) {
-		Usuario usuarioSalvo = usuarioService.singup(usuario);
+	public ResponseEntity<Object>singup(@RequestBody @Valid UsuarioDto usuarioDto) {
+
+		Usuario usuarioSalvo = usuarioService.singup(usuarioDto.convertToUsuario());
 		Response<Usuario> response  = new Response<>();
 		response.setToken(TokenUtil.getToken(usuarioSalvo.getEmail()));
 		return ResponseEntity.ok(response );
 	} 
 	
 	@PostMapping("/singin")
-	public ResponseEntity<Object> singup(@RequestBody  AuthenticationRequest usuarioRequest) {
+	public ResponseEntity<Object> singin(@RequestBody  UsuarioDto usuarioDto) {
+	    Usuario usuarioRequest = usuarioDto.convertToUsuario();
+		
 	    ValidarFildsAuthentication(usuarioRequest);
 	    
-	    Usuario usuarioSalvo =  usuarioService.singin(usuarioRequest.convertToUsuario());
+	    Usuario usuarioSalvo =  usuarioService.singin(usuarioRequest);
 	    
 	    Response<Usuario> response  = new Response<>();
 		response.setToken(TokenUtil.getToken(usuarioSalvo.getEmail()));
@@ -48,7 +52,7 @@ public class UsuarioResource {
 		return ResponseEntity.ok(response);
 	}
 
-	private void ValidarFildsAuthentication(AuthenticationRequest usuarioRequest) {
+	private void ValidarFildsAuthentication(Usuario usuarioRequest) {
 		if(usuarioRequest == null || usuarioRequest.getEmail() == null || usuarioRequest.getPassword() == null)
 	  		   throw new InvalidFieldsException("Missing Fields");
 	} 

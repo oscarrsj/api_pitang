@@ -1,4 +1,4 @@
-package br.desafio.pitang.security.exception;
+package br.desafio.pitang.exception;
 
 import java.util.List;
 import java.util.stream.Collectors;

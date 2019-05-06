@@ -18,18 +18,16 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.desafio.pitang.jwt.TokenUtil;
+import br.desafio.pitang.config.jwt.TokenUtil;
+import br.desafio.pitang.exception.InvalidFieldsException;
+import br.desafio.pitang.exception.ResourceUnAuthorizedException;
 import br.desafio.pitang.model.Telefone;
 import br.desafio.pitang.model.Usuario;
-import br.desafio.pitang.security.exception.InvalidFieldsException;
-import br.desafio.pitang.security.exception.InvalidTokenException;
-import br.desafio.pitang.security.exception.ResourceUnAuthorizedException;
 import br.desafio.pitang.service.UsuarioService;
 
 @RunWith(SpringRunner.class)
@@ -194,7 +192,7 @@ public class UsuarioResourceTest {
 
 	private String obterJsonAuthenticationRequestRequisicaoPost(boolean informacoesValidas)
 			throws JsonProcessingException {
-		AuthenticationRequest usuario = new AuthenticationRequest();
+		Usuario usuario = new Usuario();
 		usuario.setEmail("emailValido@gmail.com");
 		if (informacoesValidas)
 			usuario.setPassword("123");

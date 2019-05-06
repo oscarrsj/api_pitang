@@ -1,4 +1,4 @@
-package br.desafio.pitang.security.exception;
+package br.desafio.pitang.exception;
 
 public class ErrorResponse {
 

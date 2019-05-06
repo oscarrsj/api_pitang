@@ -1,4 +1,4 @@
-package br.desafio.pitang.security.config;
+package br.desafio.pitang.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

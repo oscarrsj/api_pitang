@@ -24,10 +24,14 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
 import br.desafio.pitang.utils.PasswordUtils;
 
+/**
+ * Entidade Usua
+ * @author oscar
+ *
+ */
 @Entity
 @NamedQuery(name = "Usuario.findByEmailAddress", query = "select u from Usuario u where u.email = ?1")
 @JsonInclude(Include.NON_NULL)
-@JsonIgnoreProperties(value = { "password"},allowSetters = true)
 public class Usuario implements Serializable {
 	/**
 	 * 
@@ -36,7 +40,6 @@ public class Usuario implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonIgnore
 	private Long id;
 
 	private String firstName;
