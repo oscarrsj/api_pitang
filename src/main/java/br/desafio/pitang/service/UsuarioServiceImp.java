@@ -70,7 +70,7 @@ public class UsuarioServiceImp implements UsuarioService {
 		}
 		
 		usuarioPesquisado.setLast_login(new Date());
-		usuarioRepository.save(usuario);
+		usuarioRepository.save(usuarioPesquisado);
 		
 		return usuarioPesquisado;
 	}

@@ -140,8 +140,8 @@ public class Usuario implements Serializable {
 	}
 	
 	@Transient
-	public UsuarioDto convertToUsuarioDTO() {
-		UsuarioDto usuarioDto = new UsuarioDto();
+	public UsuarioSingUpDto convertToUsuarioDTO() {
+		UsuarioMeDto usuarioDto = new UsuarioMeDto();
 		usuarioDto.setFirstName(this.firstName);
 		usuarioDto.setLastName(this.lastName);
 		usuarioDto.setEmail(this.email);
